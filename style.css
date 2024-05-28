@@ -9,7 +9,8 @@ body {
     display: grid;
     grid-template-columns: repeat(8, 50px);
     grid-template-rows: repeat(8, 50px);
-    gap: 2px;
+    gap: 1px;
+    border: 5px solid rgb(55, 232, 255);
 }
 
 .cell {
@@ -43,4 +44,12 @@ body {
 
 .piece.black {
     background-color: rgb(172, 209, 70);
+}
+
+#statistics {
+    margin-top: 20px;
+}
+
+button {
+    margin: 5px;
 }
