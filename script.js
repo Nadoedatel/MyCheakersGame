@@ -13,15 +13,16 @@ const redTakenDisplay = document.getElementById('red-taken');
 const blackTakenDisplay = document.getElementById('black-taken');
 
 // Выбор команды
-let currentPlayer = null;
+let playerColor = null;
+let currentPlayer = 'red'; // Красные начинают первыми
 
 document.getElementById('choose-red').addEventListener('click', () => {
-    currentPlayer = 'red';
+    playerColor = 'red';
     alert('You are playing as Red');
 });
 
 document.getElementById('choose-black').addEventListener('click', () => {
-    currentPlayer = 'black';
+    playerColor = 'black';
     alert('You are playing as Black');
 });
 
@@ -92,24 +93,39 @@ function movePiece(piece, targetCell) {
         const rowDiff = Math.abs(newRow - oldRow);
         const colDiff = Math.abs(newCol - oldCol);
 
-        if (rowDiff === 2 && colDiff === 2) {
-            const midRow = (oldRow + newRow) / 2;
-            const midCol = (oldCol + newCol) / 2;
-            const midCell = gameBoard.children[midRow * boardSize + midCol];
-            if (midCell.firstChild && midCell.firstChild.classList.contains('piece') &&
-                midCell.firstChild.classList.contains(currentPlayer === 'red' ? 'black' : 'red')) {
-                midCell.removeChild(midCell.firstChild);
-                if (currentPlayer === 'red') {
-                    blackTaken++;
-                } else {
-                    redTaken++;
+        if (isValidMove(oldRow, oldCol, newRow, newCol, piece.classList.contains('red'))) {
+            if (rowDiff === 2 && colDiff === 2) {
+                const midRow = (oldRow + newRow) / 2;
+                const midCol = (oldCol + newCol) / 2;
+                const midCell = gameBoard.children[midRow * boardSize + midCol];
+                if (midCell.firstChild && midCell.firstChild.classList.contains('piece') &&
+                    midCell.firstChild.classList.contains(currentPlayer === 'red' ? 'black' : 'red')) {
+                    midCell.removeChild(midCell.firstChild);
+                    if (currentPlayer === 'red') {
+                        blackTaken++;
+                    } else {
+                        redTaken++;
+                    }
+                    updateStatistics();
                 }
-                updateStatistics();
             }
-        }
 
-        targetCell.appendChild(piece);
+            targetCell.appendChild(piece);
+            currentPlayer = currentPlayer === 'red' ? 'black' : 'red'; // Меняем игрока после каждого хода
+        }
     }
+}
+
+function isValidMove(oldRow, oldCol, newRow, newCol, isRed) {
+    const rowDiff = newRow - oldRow;
+    const colDiff = Math.abs(newCol - oldCol);
+
+    if (colDiff !== 1 && colDiff !== 2) return false; // Проверка на движение по диагонали
+
+    if (isRed && rowDiff !== 1 && rowDiff !== 2) return false; // Проверка движения вперед для красных
+    if (!isRed && rowDiff !== -1 && rowDiff !== -2) return false; // Проверка движения вперед для черных
+
+    return true;
 }
 
 function updateStatistics() {
