@@ -8,11 +8,16 @@
 </head>
 <body>
     <h1>Checkers Game</h1>
-    <div>
+    <div id="team-selection">
         <button id="choose-red">Play as Red</button>
-        <button id="choose-black">Play as Black</button>
+        <button id="choose-black">Play as Green</button>
     </div>
-    <div id="game-board"></div>
+    <div id="game-container">
+        <div id="turn-indicator">
+            <span id="arrow">↑</span>
+        </div>
+        <div id="game-board"></div>
+    </div>
     <div id="statistics">
         <p id="red-taken">Red pieces taken: 0</p>
         <p id="black-taken">Black pieces taken: 0</p>
